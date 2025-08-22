@@ -47,7 +47,7 @@ sed -i 's/ntp1.aliyun.com/ntp.aliyun.com/' package/emortal/default-settings/file
 
 # Modify default LAN ip
 echo 'Modify default LAN IP...'
-sed -i 's/192.168.1.1/192.168.31.1/' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/10.0.0.2/' package/base-files/files/bin/config_generate
 
 # sysctl -a
 # fix v2ray too many open files
@@ -61,7 +61,7 @@ sed -i '/customized in this file/a fs.file-max=102400\nnet.ipv4.neigh.default.gc
 
 # 修改无线命名、加密方式及密码
 sed -i "s/\${s}.disabled='0'/\${s}.country=US\nset \${s}.disabled='0'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
-sed -i "s/\${si}.ssid='ImmortalWrt'/wireless.default_radio0.ssid='${WIFI_SSID}'\nset wireless.default_radio1.ssid='${WIFI_SSID}_2.4G'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
+sed -i "s/\${si}.ssid='PX'/wireless.default_radio0.ssid='${WIFI_SSID}'\nset wireless.default_radio1.ssid='${WIFI_SSID}_2.4G'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
 sed -i "s/\${si}.encryption='none'/\${si}.encryption='psk-mixed'\nset \${si}.key='${WIFI_KEY}'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
 
 # Modify default banner
@@ -75,7 +75,7 @@ echo "██║   ██║██╔═══╝ ██╔══╝  ██║�
 echo "╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║    " >> package/base-files/files/etc/banner
 echo " ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝    " >> package/base-files/files/etc/banner
 echo " ------------------------------------------------------------- " >> package/base-files/files/etc/banner
-echo " %D %C ${build_date} by hnyyghk                                " >> package/base-files/files/etc/banner
+echo " %D %C ${build_date} by xuy132                                " >> package/base-files/files/etc/banner
 echo " ------------------------------------------------------------- " >> package/base-files/files/etc/banner
 echo "      REPO_URL: $REPO_URL                                      " >> package/base-files/files/etc/banner
 echo "   REPO_BRANCH: $REPO_BRANCH                                   " >> package/base-files/files/etc/banner
