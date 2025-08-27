@@ -1,96 +1,85 @@
-#!/bin/sh
+#!/bin/bash
+#
+# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+# File name: diy-part2-immortalwrt.sh
+# Description: OpenWrt DIY script part 2 (After Update feeds)
+#
 
-board_name=$(cat /tmp/sysinfo/board_name)
+# https://github.com/deplives/OpenWrt-CI-RC/blob/main/second.sh
+# https://github.com/jarod360/Redmi_AX6/blob/main/diy-part2.sh
 
-configure_wifi() {
-    local radio=$1
-    local channel=$2
-    local htmode=$3
-    local txpower=$4
-    local ssid=$5
-    local key=$6
-    local now_encryption=$(uci get wireless.default_radio${radio}.encryption)
-    if [ -n "$now_encryption" ] && [ "$now_encryption" != "none" ]; then
-        return 0
-    fi
-    uci -q batch <<EOF
-set wireless.radio${radio}.channel="${channel}"
-set wireless.radio${radio}.htmode="${htmode}"
-set wireless.radio${radio}.mu_beamformer='1'
-set wireless.radio${radio}.country='US'
-set wireless.radio${radio}.txpower="${txpower}"
-set wireless.radio${radio}.cell_density='0'
-set wireless.radio${radio}.disabled='0'
-set wireless.default_radio${radio}.ssid="${ssid}"
-set wireless.default_radio${radio}.encryption='psk2+ccmp'
-set wireless.default_radio${radio}.key="${key}"
-set wireless.default_radio${radio}.ieee80211k='1'
-set wireless.default_radio${radio}.time_advertisement='2'
-set wireless.default_radio${radio}.time_zone='CST-8'
-set wireless.default_radio${radio}.bss_transition='1'
-set wireless.default_radio${radio}.wnm_sleep_mode='1'
-set wireless.default_radio${radio}.wnm_sleep_mode_no_keys='1'
-EOF
-}
+REPO_URL=$1
+if [ -z "$REPO_URL" ]; then
+    REPO_URL='Unknown'
+fi
+REPO_BRANCH=$2
+if [ -z "$REPO_BRANCH" ]; then
+    REPO_BRANCH='Unknown'
+fi
+COMMIT_HASH=$3
+if [ -z "$COMMIT_HASH" ]; then
+    COMMIT_HASH='Unknown'
+fi
+DEVICE_NAME=$4
+if [ -z "$DEVICE_NAME" ]; then
+    DEVICE_NAME='Unknown'
+fi
+WIFI_SSID=$5
+if [ -z "$WIFI_SSID" ]; then
+    WIFI_SSID='Unknown'
+fi
+WIFI_KEY=$6
+if [ -z "$WIFI_KEY" ]; then
+    WIFI_KEY='Unknown'
+fi
 
-jdc_ax1800_pro_wifi_cfg() {
-    configure_wifi 0 149 HE80 20 'JDC_AX1800PRO_5G' '12345678'
-    configure_wifi 1 1 HE20 20 'JDC_AX1800PRO' '12345678'
-}
+# Modify default NTP server
+echo 'Modify default NTP server...'
+sed -i 's/cn.ntp.org.cn/pool.ntp.org/' package/emortal/default-settings/files/99-default-settings-chinese
+sed -i 's/ntp.ntsc.ac.cn/cn.ntp.org.cn/' package/emortal/default-settings/files/99-default-settings-chinese
+sed -i 's/ntp.tencent.com/ntp.ntsc.ac.cn/' package/emortal/default-settings/files/99-default-settings-chinese
+sed -i 's/ntp1.aliyun.com/ntp.aliyun.com/' package/emortal/default-settings/files/99-default-settings-chinese
 
-jdc_ax6600_wifi_cfg() {
-    configure_wifi 0 149 HE80 22 'JDC_AX6600_5G1' '12345678'
-    configure_wifi 1 1 HE20 22 'JDC_AX6600' '12345678'
-    configure_wifi 2 44 HE160 23 'JDC_AX6600_5G2' '12345678'
-}
+# Modify default LAN ip
+echo 'Modify default LAN IP...'
+sed -i 's/192.168.1.1/10.0.0.2/' package/base-files/files/bin/config_generate
 
-redmi_ax5_wifi_cfg() {
-    configure_wifi 0 149 HE80 20 'Redmi_AX5_5G' '12345678'
-    configure_wifi 1 1 HE20 20 'Redmi_AX5' '12345678'
-}
+# sysctl -a
+# fix v2ray too many open files
+# fs.file-max = 41549
+# increase APR kernel parameters for arp ram full load
+# net.ipv4.neigh.default.gc_thresh1 = 128
+# net.ipv4.neigh.default.gc_thresh2 = 512
+# net.ipv4.neigh.default.gc_thresh3 = 1024
+# net.netfilter.nf_conntrack_max = 26112
+sed -i '/customized in this file/a fs.file-max=102400\nnet.ipv4.neigh.default.gc_thresh1=512\nnet.ipv4.neigh.default.gc_thresh2=2048\nnet.ipv4.neigh.default.gc_thresh3=4096\nnet.netfilter.nf_conntrack_max=65535' package/base-files/files/etc/sysctl.conf
 
-aliyun_ap8220_wifi_cfg() {
-    configure_wifi 0 149 HE80 26 'Aliyun_AP8220_5G' '12345678'
-    configure_wifi 1 1 HE20 23 'Aliyun_AP8220' '12345678'
-}
+# 修改无线命名、加密方式及密码
+sed -i "s/\${s}.disabled='0'/\${s}.country=US\nset \${s}.disabled='0'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
+sed -i "s/\${si}.ssid='ImmortalWrt'/wireless.default_radio0.ssid='PX'\nset wireless.default_radio1.ssid='Pp'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
+sed -i "s/\${si}.encryption='none'/\${si}.encryption='psk-mixed'\nset \${si}.key='12345678'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
 
-cmcc_rax3000m_wifi_cfg() {
-    configure_wifi 0 1 HE20 23 'CMCC_RAX3000M' '12345678'
-    configure_wifi 1 44 HE160 25 'CMCC_RAX3000M_5G' '12345678'
-}
-
-redmi_ax6_wifi_cfg() {
-    configure_wifi 0 149 HE80 22 'PX_5G' '1234567890'
-    configure_wifi 1 6 HE20 21 'Pp' '1234567890'
-}
-
-case "${board_name}" in
-jdcloud,ax1800-pro | \
-    jdcloud,re-ss-01)
-    jdc_ax1800_pro_wifi_cfg
-    ;;
-jdcloud,ax6600 | \
-    jdcloud,re-cs-02)
-    jdc_ax6600_wifi_cfg
-    ;;
-redmi,ax5 | \
-    redmi,ax5-jdcloud)
-    redmi_ax5_wifi_cfg
-    ;;
-aliyun,ap8220)
-    aliyun_ap8220_wifi_cfg
-    ;;
-cmcc,rax3000m)
-    cmcc_rax3000m_wifi_cfg
-    ;;
-redmi,ax6 | \
-    redmi,ax6-stock)
-    redmi_ax6_wifi_cfg
-    ;;
-*)
-    exit 0
-    ;;
-esac
-
-uci commit wireless
-/etc/init.d/network restart
+# Modify default banner
+echo 'Modify default banner...'
+build_date=$(date +"%Y-%m-%d %H:%M:%S")
+echo "                                                               " >  package/base-files/files/etc/banner
+echo " ██████╗ ██████╗ ███████╗███╗   ██╗██╗    ██╗██████╗ ████████╗ " >> package/base-files/files/etc/banner
+echo "██╔═══██╗██╔══██╗██╔════╝████╗  ██║██║    ██║██╔══██╗╚══██╔══╝ " >> package/base-files/files/etc/banner
+echo "██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║ █╗ ██║██████╔╝   ██║    " >> package/base-files/files/etc/banner
+echo "██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║███╗██║██╔══██╗   ██║    " >> package/base-files/files/etc/banner
+echo "╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║    " >> package/base-files/files/etc/banner
+echo " ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝    " >> package/base-files/files/etc/banner
+echo " ------------------------------------------------------------- " >> package/base-files/files/etc/banner
+echo " %D %C ${build_date} by xuy132                                " >> package/base-files/files/etc/banner
+echo " ------------------------------------------------------------- " >> package/base-files/files/etc/banner
+echo "      REPO_URL: $REPO_URL                                      " >> package/base-files/files/etc/banner
+echo "   REPO_BRANCH: $REPO_BRANCH                                   " >> package/base-files/files/etc/banner
+echo "   COMMIT_HASH: $COMMIT_HASH                                   " >> package/base-files/files/etc/banner
+echo "   DEVICE_NAME: $DEVICE_NAME                                   " >> package/base-files/files/etc/banner
+echo " ------------------------------------------------------------- " >> package/base-files/files/etc/banner
+echo "                                                               " >> package/base-files/files/etc/banner
