@@ -25,7 +25,6 @@ echo 'src-git helloworld https://github.com/fw876/helloworld' >> feeds.conf.defa
 echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >> feeds.conf.default
 #echo 'src-git lienol https://github.com/Lienol/openwrt-package' >> feeds.conf.default
 #echo 'src-git Boos https://github.com/Boos4721/OpenWrt-Packages' >> feeds.conf.default
-# 修改无线命名、加密方式及密码
-sed -i "s/\${s}.disabled='0'/\${s}.country=US\nset \${s}.disabled='0'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
-sed -i "s/\${si}.ssid='PX'/wireless.default_radio0.ssid='PX'\nset wireless.default_radio1.ssid='Pp'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
-sed -i "s/\${si}.encryption='none'/\${si}.encryption='psk-mixed'\nset \${si}.key='12345678'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
+# 修改无线名称
+sed -i 's/OpenWrt/Pp/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i 's/OpenWrt/Pp/g' package/lean/mt/drivers/mt_wifi/files/*.dat
