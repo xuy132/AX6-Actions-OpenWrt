@@ -1,17 +1,11 @@
-#!/bin/bash
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part2-immortalwrt.sh
-# Description: OpenWrt DIY script part 2 (After Update feeds)
-#
+#!/bin/sh
 
-# https://github.com/deplives/OpenWrt-CI-RC/blob/main/second.sh
-# https://github.com/jarod360/Redmi_AX6/blob/main/diy-part2.sh
+uci set luci.main.lang='zh_cn'
+uci commit luci
+
+uci set system.@system[0].timezone=CST-8
+uci set system.@system[0].zonename=Asia/Shanghai
+uci commit system
 
 REPO_URL=$1
 if [ -z "$REPO_URL" ]; then
