@@ -25,6 +25,3 @@ echo 'src-git helloworld https://github.com/fw876/helloworld' >> feeds.conf.defa
 echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >> feeds.conf.default
 #echo 'src-git lienol https://github.com/Lienol/openwrt-package' >> feeds.conf.default
 #echo 'src-git Boos https://github.com/Boos4721/OpenWrt-Packages' >> feeds.conf.default
-# 修改无线名称
-sed -i 's/OpenWrt/Pp/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-sed -i 's/OpenWrt/Pp/g' package/lean/mt/drivers/mt_wifi/files/*.dat
