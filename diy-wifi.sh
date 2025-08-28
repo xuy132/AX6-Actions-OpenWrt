@@ -7,6 +7,16 @@ uci set system.@system[0].timezone=CST-8
 uci set system.@system[0].zonename=Asia/Shanghai
 uci commit system
 
+# 修改无线配置
+uci set wireless.@wifi-iface[0].ssid='Pp'
+uci set wireless.@wifi-iface[0].encryption='psk2+ccmp'
+uci set wireless.@wifi-iface[0].key='12345678'
+uci set wireless.default_radio0.skip_inactivity_poll='1'
+uci set wireless.radio0.cell_density='0'
+uci set wireless.radio0.country='CN'
+uci commit wireless
+#
+
 REPO_URL=$1
 if [ -z "$REPO_URL" ]; then
     REPO_URL='Unknown'
