@@ -9,6 +9,11 @@
 # File name: diy-part1.sh
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #
+#添加额外软件包
+#git clone https://github.com/immortalwrt/luci-app-unblockneteasemusic package/luci-app-unblockneteasemusic
+#git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-app-jd-dailybonus
+#git clone https://github.com/jerrykuku/lua-maxminddb.git package/lua-maxminddb
+
 #修改默认IP
 sed -i 's/192.168.1.1/10.0.0.2/g' package/base-files/files/bin/config_generate
 #修改主机名
@@ -27,3 +32,8 @@ echo 'src-git taskplan  https://github.com/sirpdboy/luci-app-taskplan' >> feeds.
 echo 'src-git NueXini_Packages https://github.com/NueXini/NueXini_Packages.git' >> feeds.conf.default
 #echo 'src-git lienol https://github.com/Lienol/openwrt-package' >> feeds.conf.default
 #echo 'src-git Boos https://github.com/Boos4721/OpenWrt-Packages' >> feeds.conf.default
+# mosdns
+find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+find ./ | grep Makefile | grep mosdns | xargs rm -f
+git clone https://github.com/sbwml/luci-app-mosdns package/mosdns
+git clone https://github.com/sbwml/v2ray-geodata package/geodata
