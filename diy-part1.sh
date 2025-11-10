@@ -24,12 +24,18 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
-#echo 'src-git helloworld https://github.com/fw876/helloworld' >> feeds.conf.default
+#echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+# echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main' >>feeds.conf.default
+# echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main' >>feeds.conf.default
+#echo 'src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git' >>feeds.conf.default
+#echo 'src-git NueXini_Packages https://github.com/NueXini/NueXini_Packages.git' >> feeds.conf.default
+#echo 'src-git bypass https://github.com/kiddin9/openwrt-bypass' >>feeds.conf.default
+#echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns -b v5' >>feeds.conf.default
 echo 'src-git taskplan  https://github.com/sirpdboy/luci-app-taskplan' >> feeds.conf.default
 #echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall;packages' >> feeds.conf.default
 #echo 'src-git passwall_luci https://github.com/xiaorouji/openwrt-passwall;luci' >> feeds.conf.default
 #echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >> feeds.conf.default
-echo 'src-git NueXini_Packages https://github.com/NueXini/NueXini_Packages.git' >> feeds.conf.default
+#echo 'src-git NueXini_Packages https://github.com/NueXini/NueXini_Packages.git' >> feeds.conf.default
 #echo 'src-git lienol https://github.com/Lienol/openwrt-package' >> feeds.conf.default
 #echo 'src-git Boos https://github.com/Boos4721/OpenWrt-Packages' >> feeds.conf.default
 # mosdns
