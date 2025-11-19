@@ -252,14 +252,14 @@ jobs:
       uses: Mattraks/delete-workflow-runs@main
       with:
         token: ${{ secrets.RELEASE_TOKEN }}
-        retain_days: 180
-        keep_minimum_runs: 10
+        retain_days: 1
+        keep_minimum_runs: 1
 
     - name: 删除旧的Releases
       uses: dev-drprasad/delete-older-releases@master
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 9
+        keep_latest: 2
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
