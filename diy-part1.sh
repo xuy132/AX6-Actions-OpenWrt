@@ -53,6 +53,8 @@ git clone https://github.com/firker/diy-ziyong -b 2305 package/diy-ziyong
 # git clone https://github.com/xiaorouji/openwrt-passwall.git package/passwall
 # git clone https://github.com/sirpdboy/luci-app-advancedplus.git package/luci-app-advancedplus
 git clone https://github.com/sirpdboy/luci-app-taskplan package/luci-app-taskplan
+git clone https://github.com/linkease/istore/trunk/luci/luci-app-store package/luci-app-store
+git clone https://github.com/linkease/istore-ui/trunk/app-store-ui package/app-store-ui
 # git clone https://github.com/sirpdboy/luci-app-eqosplus package/luci-app-eqosplus
 # git clone -b luci-smartdns-new-version https://github.com/xiaorouji/openwrt-passwall.git package/passwall
 # git clone https://github.com/tty228/luci-app-wechatpush.git package/luci-app-serverchan
